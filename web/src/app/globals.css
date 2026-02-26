@@ -1,0 +1,101 @@
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* ===============================
+   Base layout
+================================ */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: rgb(248 250 252); /* slate-50 */
+  color: rgb(15 23 42);         /* slate-900 */
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===============================
+   Typography tweaks
+================================ */
+
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+small {
+  color: rgb(100 116 139); /* slate-500 */
+}
+
+/* ===============================
+   Form elements normalization
+================================ */
+
+input,
+textarea,
+select {
+  outline: none;
+  border-radius: 12px;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); /* blue focus ring */
+}
+
+/* ===============================
+   Buttons reset (минимальный)
+================================ */
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   Scrollbar styling
+================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(203 213 225); /* slate-300 */
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(148 163 184); /* slate-400 */
+}
+
+/* ===============================
+   Utility helpers (без @apply!)
+================================ */
+
+.card-soft {
+  background: white;
+  border: 1px solid rgb(226 232 240); /* slate-200 */
+  border-radius: 16px;
+}
+
+.text-muted {
+  color: rgb(100 116 139); /* slate-500 */
+}
+
+.bg-soft {
+  background: rgb(241 245 249); /* slate-100 */
+}

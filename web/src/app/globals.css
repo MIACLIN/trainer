@@ -2,44 +2,93 @@
 @import "tailwindcss";
 
 /* ===============================
+   Design tokens (white-blue)
+================================ */
+:root {
+  /* surfaces */
+  --bg: #f5f8ff;          /* бело-синий фон */
+  --bg2: #f8fbff;         /* второй слой фона */
+  --surface: #ffffff;     /* карточки */
+  --surface-2: #f1f5ff;   /* мягкая заливка */
+
+  /* text */
+  --text: #0f172a;        /* slate-900 */
+  --muted: #64748b;       /* slate-500 */
+  --muted2: #94a3b8;      /* slate-400 */
+
+  /* borders/shadows */
+  --border: rgba(15, 23, 42, 0.10);
+  --border-strong: rgba(15, 23, 42, 0.14);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  /* brand */
+  --primary: #2563eb;       /* blue-600 */
+  --primary-hover: #1d4ed8; /* blue-700 */
+  --ring: rgba(37, 99, 235, 0.18);
+
+  /* radii */
+  --r-lg: 16px;
+  --r-xl: 20px;
+}
+
+/* ===============================
    Base layout
 ================================ */
-
 html,
 body {
   height: 100%;
 }
 
 body {
-  background: rgb(248 250 252); /* slate-50 */
-  color: rgb(15 23 42);         /* slate-900 */
+  color: var(--text);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* бело-синий “продуктовый” фон */
+  background:
+    radial-gradient(900px 500px at 85% 10%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 10% 0%, rgba(59, 130, 246, 0.10), transparent 55%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+/* nicer selection */
+::selection {
+  background: rgba(37, 99, 235, 0.18);
 }
 
 /* ===============================
-   Typography tweaks
+   Typography
 ================================ */
-
 h1 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
 }
 
 h2 {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 650;
+  letter-spacing: -0.005em;
 }
 
 small {
-  color: rgb(100 116 139); /* slate-500 */
+  color: var(--muted);
+}
+
+/* links (если появятся) */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 /* ===============================
-   Form elements normalization
+   Form elements
 ================================ */
-
 input,
 textarea,
 select {
@@ -48,54 +97,89 @@ select {
 }
 
 input:focus,
-textarea:focus {
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); /* blue focus ring */
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 4px var(--ring);
 }
 
 /* ===============================
-   Buttons reset (минимальный)
+   Buttons
 ================================ */
-
 button {
   cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* Optional utility button classes */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+/* ===============================
+   Cards / surfaces helpers
+================================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-soft {
+  background: var(--surface);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: var(--r-lg);
+}
+
+.bg-soft {
+  background: var(--surface-2);
+}
+
+.text-muted {
+  color: var(--muted);
 }
 
 /* ===============================
    Scrollbar styling
 ================================ */
-
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(203 213 225); /* slate-300 */
+  background: rgba(148, 163, 184, 0.65); /* slate-400 */
   border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(148 163 184); /* slate-400 */
-}
-
-/* ===============================
-   Utility helpers (без @apply!)
-================================ */
-
-.card-soft {
-  background: white;
-  border: 1px solid rgb(226 232 240); /* slate-200 */
-  border-radius: 16px;
-}
-
-.text-muted {
-  color: rgb(100 116 139); /* slate-500 */
-}
-
-.bg-soft {
-  background: rgb(241 245 249); /* slate-100 */
+  background: rgba(100, 116, 139, 0.75); /* slate-500 */
+  border: 3px solid transparent;
+  background-clip: content-box;
 }

@@ -4,4 +4,3 @@ node_modules/
 .env.local
 .env
 *.log
-"@ | Out-File -Encoding utf8 web\.gitignore

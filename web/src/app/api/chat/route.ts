@@ -10,12 +10,6 @@ export async function POST(req: Request) {
   const patient = PATIENTS.find((p) => p.id === patientId);
   if (!patient) return NextResponse.json({ error: "Unknown patientId" }, { status: 400 });
 
-  // EASY-режим: пациент должен быть легко проходимым
-  // Логика:
-  // - быстро отвечает на вопросы (кооперативно)
-  // - раскрывает внутреннюю потребность после 1–2 уточняющих вопросов
-  // - даёт максимум 1 мягкое возражение за диалог
-  // - если продавец: (эмпатия + 2-3 вопроса + понятный следующий шаг + приглашение записаться) -> согласие
   const system: Msg = {
     role: "system",
     content: [
@@ -36,15 +30,15 @@ export async function POST(req: Request) {
       "",
       `Профиль пациента: ${patient.title}`,
       `DISC: ${patient.disc}`,
-      `Внутренняя потребность (раскрывай после 1–2 вопросов): ${patient.inner_need}`,
-      `Внешняя потребность (что говоришь в начале): ${patient.outer_need}`,
-      `Возможные возражения (выбери ОДНО как главное): ${Array.isArray(patient.objections) ? patient.objections.join("; ") : ""}`,
+      `Внутренняя потребность (раскрывай после 1–2 вопросов): ${patient.deepNeed}`,
+      `Внешняя потребность (что говоришь в начале): ${patient.surfaceNeed}`,
+      `Возможные возражения (выбери ОДНО как главное): ${Array.isArray(patient.fears) ? patient.fears.join("; ") : ""}`,
       "",
       "Инициация (если это первая реплика в диалоге):",
-      `- Начни разговор с внешней потребности: "${patient.outer_need}"`,
+      `- Начни разговор с внешней потребности: "${patient.surfaceNeed}"`,
       "",
       "Правила поведения персонажа:",
-      ...(Array.isArray(patient.style_rules) ? patient.style_rules.map((s: string) => `- ${s}`) : []),
+      ...(Array.isArray(patient.easyRules) ? patient.easyRules.map((s: string) => `- ${s}`) : []),
       "",
       "Формат ответа:",
       "- 1–3 предложения. Живой разговорный русский.",
@@ -53,7 +47,6 @@ export async function POST(req: Request) {
     ].join("\n"),
   };
 
-  // Если менеджер ещё ничего не писал, заставим модель начать с первой реплики пациента
   const safeMessages = Array.isArray(messages) ? messages : [];
   const hasAnyUser = safeMessages.some((m) => m.role === "user" && (m.content || "").trim().length > 0);
 
@@ -62,7 +55,7 @@ export async function POST(req: Request) {
     : [
         {
           role: "assistant",
-          content: patient.outer_need || "Здравствуйте. Хотел(а) бы записаться, есть вопрос по зубам.",
+          content: patient.surfaceNeed || "Здравствуйте. Хотел(а) бы записаться, есть вопрос по зубам.",
         },
       ];
 
@@ -76,8 +69,6 @@ export async function POST(req: Request) {
       model: process.env.DEEPSEEK_MODEL,
       messages: [system, ...seed, ...safeMessages],
       temperature: 0.7,
-      // если DeepSeek поддерживает max_tokens — можно ограничить
-      // max_tokens: 200,
     }),
   });
 
